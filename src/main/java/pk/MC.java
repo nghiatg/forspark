@@ -16,7 +16,7 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 public class MC {
-    static SparkConf conf = new SparkConf().setAppName("spark-sample").set("spark.sql.parquet.binaryAsString","true");
+    static SparkConf conf = new SparkConf().setMaster("local[4]").setAppName("spark-sample").set("spark.sql.parquet.binaryAsString","true");
     static JavaSparkContext jsc = new JavaSparkContext(conf);
     static SQLContext sqlc = new SQLContext(jsc);
     static {
@@ -36,7 +36,7 @@ public class MC {
 
             DataFrame log = readParquet(args[0]);
             DataFrame titleCate = titleCate(args[1]);
-            DataFrame bannerCate = bannreCate(args[2]);
+            DataFrame bannerCate = readParquet(args[2]);
             //parquet.join(banner,parquet.col("bannerId").equalTo(banner.col("bannerid")).and(parquet.col("geo").gt(banner.col("banner_cat")))).show(
             log.cache();
             titleCate.cache();
