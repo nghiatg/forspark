@@ -96,7 +96,7 @@ public class Pecent_Click_View {
 					return RowFactory.create(key,value);
 				}
 			});
-			DataFrame kq = sqlContext.createDataFrame(tk, schema);
+			DataFrame kq = MC.sqlc.createDataFrame(tk, schema);
 			kq.show();
 //			kq.write().format("parquet").save("/user/demtv/kq_tk");
 		}
