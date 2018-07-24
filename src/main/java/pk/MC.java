@@ -50,30 +50,30 @@ public class MC {
     
     
 
-    public static DataFrame readParquet(String logPath) throws Exception { 
-            DataFrame df = sqlc.read().parquet(logPath);
-            return df;
-    }
-
-    public static DataFrame bannreCate(String bannerCatePath) throws Exception { 
-            BufferedReader br = new BufferedReader(new FileReader(bannerCatePath));
-            String line = br.readLine();
-            ArrayList<Row> rows = new ArrayList<Row>();
-            while(line != null) {
-                    rows.add(RowFactory.create(Integer.parseInt(line.split("\t")[0]),Integer.parseInt(line.split("\t")[1])));
-                    line = br.readLine();
-            }
-            StructType schema = new StructType(new StructField[] {
-                            new StructField("bannerid",DataTypes.IntegerType,false,Metadata.empty()),
-                            new StructField("banner_cat",DataTypes.IntegerType,false,Metadata.empty())
-            });
-            br.close();
-            return sqlc.createDataFrame(rows, schema);
-    }
-
-    public static DataFrame titleCate(String titleCatePath) throws Exception {
-            DataFrame df = sqlc.read().parquet(titleCatePath);
-            return df;
-    }
+//    public static DataFrame readParquet(String logPath) throws Exception { 
+//            DataFrame df = sqlc.read().parquet(logPath);
+//            return df;
+//    }
+//
+//    public static DataFrame bannreCate(String bannerCatePath) throws Exception { 
+//            BufferedReader br = new BufferedReader(new FileReader(bannerCatePath));
+//            String line = br.readLine();
+//            ArrayList<Row> rows = new ArrayList<Row>();
+//            while(line != null) {
+//                    rows.add(RowFactory.create(Integer.parseInt(line.split("\t")[0]),Integer.parseInt(line.split("\t")[1])));
+//                    line = br.readLine();
+//            }
+//            StructType schema = new StructType(new StructField[] {
+//                            new StructField("bannerid",DataTypes.IntegerType,false,Metadata.empty()),
+//                            new StructField("banner_cat",DataTypes.IntegerType,false,Metadata.empty())
+//            });
+//            br.close();
+//            return sqlc.createDataFrame(rows, schema);
+//    }
+//
+//    public static DataFrame titleCate(String titleCatePath) throws Exception {
+//            DataFrame df = sqlc.read().parquet(titleCatePath);
+//            return df;
+//    }
 
 }

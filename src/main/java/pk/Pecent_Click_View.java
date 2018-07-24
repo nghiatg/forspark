@@ -32,12 +32,12 @@ public class Pecent_Click_View {
 		domains.add("nld.com.vn");
 		domains.add("soha.vn");
 		
-		SparkConf conf = new SparkConf().setAppName("update_db")
-				.set("spark.sql.parquet.binaryAsString", "true");
-		JavaSparkContext jsc = new JavaSparkContext(conf);
-		jsc.setLogLevel("ERROR");
-		SQLContext sqlContext = new SQLContext(jsc);
-		DataFrame df = sqlContext.read().load(fortkePath);
+//		SparkConf conf = new SparkConf().setAppName("update_db")
+//				.set("spark.sql.parquet.binaryAsString", "true");
+//		JavaSparkContext jsc = new JavaSparkContext(conf);
+//		jsc.setLogLevel("ERROR");
+//		SQLContext sqlContext = new SQLContext(jsc);
+		DataFrame df = MC.sqlc.read().load(fortkePath);
 		
 		for(String d : domains) {
 			System.out.println("\n\n" + d);
