@@ -16,7 +16,7 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 public class MC {
-    static SparkConf conf = new SparkConf().setAppName("spark-sample").set("spark.sql.parquet.binaryAsString","true");
+    static SparkConf conf = new SparkConf().setAppName("spark-sample").set("spark.sql.parquet.binaryAsString","true").setMaster("local[2]");
     static JavaSparkContext jsc = new JavaSparkContext(conf);
     static SQLContext sqlc = new SQLContext(jsc);
     static {
@@ -34,18 +34,21 @@ public class MC {
     //                3 --- output path
     public static void main(String[] args) throws Exception{
 
-            DataFrame log = readParquet(args[0]);
-            DataFrame titleCate = titleCate(args[1]);
-            DataFrame bannerCate = readParquet(args[2]);
-            //parquet.join(banner,parquet.col("bannerId").equalTo(banner.col("bannerid")).and(parquet.col("geo").gt(banner.col("banner_cat")))).show(
-//            log.cache();
-//            titleCate.cache();
-//            bannerCate.cache();
-            DataFrame needToSave = log.join(titleCate,log.col("domain").equalTo(titleCate.col("domain")).and(log.col("path").equalTo(titleCate.col("path"))))
-                                            .join(bannerCate,log.col("bannerId").equalTo(bannerCate.col("bannerid"))).select(bannerCate.col("banner_cat"),titleCate.col("cate"),log.col("click_or_view"),log.col("domain"));
-            needToSave.write().format("parquet").save(args[3]);
-
+//            DataFrame log = readParquet(args[0]);
+//            DataFrame titleCate = titleCate(args[1]);
+//            DataFrame bannerCate = readParquet(args[2]);
+//            //parquet.join(banner,parquet.col("bannerId").equalTo(banner.col("bannerid")).and(parquet.col("geo").gt(banner.col("banner_cat")))).show(
+////            log.cache();
+////            titleCate.cache();
+////            bannerCate.cache();
+//            DataFrame needToSave = log.join(titleCate,log.col("domain").equalTo(titleCate.col("domain")).and(log.col("path").equalTo(titleCate.col("path"))))
+//                                            .join(bannerCate,log.col("bannerId").equalTo(bannerCate.col("bannerid"))).select(bannerCate.col("banner_cat"),titleCate.col("cate"),log.col("click_or_view"),log.col("domain"));
+//            needToSave.write().format("parquet").save(args[3]);
+    	
+    	Pecent_Click_View.tke(args[0]);
     }
+    
+    
 
     public static DataFrame readParquet(String logPath) throws Exception { 
             DataFrame df = sqlc.read().parquet(logPath);
