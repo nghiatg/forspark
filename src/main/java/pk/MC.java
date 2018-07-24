@@ -33,47 +33,46 @@ public class MC {
     //                2 --- banner category path
     //                3 --- output path
     public static void main(String[] args) throws Exception{
+	joinTable(args[0],args[1],args[2],args[3]);
+	//readParquet(args[0]).show(100);
+    }
 
-//            DataFrame log = readParquet(args[0]);
-//            DataFrame titleCate = titleCate(args[1]);
-//            DataFrame bannerCate = readParquet(args[2]);
-//            //parquet.join(banner,parquet.col("bannerId").equalTo(banner.col("bannerid")).and(parquet.col("geo").gt(banner.col("banner_cat")))).show(
-////            log.cache();
-////            titleCate.cache();
-////            bannerCate.cache();
-//            DataFrame needToSave = log.join(titleCate,log.col("domain").equalTo(titleCate.col("domain")).and(log.col("path").equalTo(titleCate.col("path"))))
-//                                            .join(bannerCate,log.col("bannerId").equalTo(bannerCate.col("bannerid"))).select(bannerCate.col("banner_cat"),titleCate.col("cate"),log.col("click_or_view"),log.col("domain"));
-//            needToSave.write().format("parquet").save(args[3]);
-    	
-    	Pecent_Click_View.tke(args[0]);
+    public static void joinTable(String logPath, String title, String bannerPath, String output) throws Exception {
+	    DataFrame log = readParquet(logPath);
+            DataFrame titleCate = titleCate(title);
+            DataFrame bannerCate = readParquet(bannerPath);
+            //parquet.join(banner,parquet.col("bannerId").equalTo(banner.col("bannerid")).and(parquet.col("geo").gt(banner.col("banner_cat")))).show(
+            DataFrame needToSave = log.join(titleCate,log.col("click_or_view").isNotNull().and(log.col("domain").equalTo(titleCate.col("domain"))).and(log.col("path").equalTo(titleCate.col("path"))))
+                                            .join(bannerCate,log.col("bannerId").equalTo(bannerCate.col("bannerid"))).select(bannerCate.col("banner_cat"),titleCate.col("cate"),log.col("click_or_view"),log.col("domain"));
+            needToSave.write().format("parquet").save(output);	
     }
     
     
 
-//    public static DataFrame readParquet(String logPath) throws Exception { 
-//            DataFrame df = sqlc.read().parquet(logPath);
-//            return df;
-//    }
-//
-//    public static DataFrame bannreCate(String bannerCatePath) throws Exception { 
-//            BufferedReader br = new BufferedReader(new FileReader(bannerCatePath));
-//            String line = br.readLine();
-//            ArrayList<Row> rows = new ArrayList<Row>();
-//            while(line != null) {
-//                    rows.add(RowFactory.create(Integer.parseInt(line.split("\t")[0]),Integer.parseInt(line.split("\t")[1])));
-//                    line = br.readLine();
-//            }
-//            StructType schema = new StructType(new StructField[] {
-//                            new StructField("bannerid",DataTypes.IntegerType,false,Metadata.empty()),
-//                            new StructField("banner_cat",DataTypes.IntegerType,false,Metadata.empty())
-//            });
-//            br.close();
-//            return sqlc.createDataFrame(rows, schema);
-//    }
-//
-//    public static DataFrame titleCate(String titleCatePath) throws Exception {
-//            DataFrame df = sqlc.read().parquet(titleCatePath);
-//            return df;
-//    }
+    public static DataFrame readParquet(String logPath) throws Exception { 
+            DataFrame df = sqlc.read().parquet(logPath);
+            return df;
+    }
+
+    public static DataFrame bannreCate(String bannerCatePath) throws Exception { 
+            BufferedReader br = new BufferedReader(new FileReader(bannerCatePath));
+            String line = br.readLine();
+            ArrayList<Row> rows = new ArrayList<Row>();
+            while(line != null) {
+                    rows.add(RowFactory.create(Integer.parseInt(line.split("\t")[0]),Integer.parseInt(line.split("\t")[1])));
+                    line = br.readLine();
+            }
+            StructType schema = new StructType(new StructField[] {
+                            new StructField("bannerid",DataTypes.IntegerType,false,Metadata.empty()),
+                            new StructField("banner_cat",DataTypes.IntegerType,false,Metadata.empty())
+            });
+            br.close();
+           return sqlc.createDataFrame(rows, schema);
+    }
+
+    public static DataFrame titleCate(String titleCatePath) throws Exception {
+            DataFrame df = sqlc.read().parquet(titleCatePath);
+            return df;
+    }
 
 }

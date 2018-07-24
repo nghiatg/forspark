@@ -41,13 +41,16 @@ public class Pecent_Click_View {
 		
 		for(String d : domains) {
 			System.out.println("\n\n" + d);
-			DataFrame dfSite = df.where(df.col("domain").equalTo(d));
+			DataFrame dfSite = df.where(df.col("domain").equalTo(d).and(df.col("cate").notEqual("")).and(df.col("cate").notEqual("-1")));
 			JavaPairRDD<String, Long> counts = dfSite.toJavaRDD().mapToPair(new PairFunction<Row, String, Long>() {
 				@Override
 				public Tuple2<String, Long> call(Row row) throws Exception {
 					// TODO Auto-generated method stub
 					int banner_id = row.getInt(0);
-					int[] index = Arrays.stream(row.getString(1).split(" ")).mapToInt(Integer::parseInt).toArray();
+					//System.out.println("row : " + row.toString());
+					//System.out.println("row.getStirng(1) : " + row.getString(1));
+					//System.out.println("length : " + row.getString(1).trim().split(" ").length);
+					int[] index = Arrays.stream(row.getString(1).trim().split(" ")).mapToInt(Integer::parseInt).toArray();
 					boolean click_or_view = row.getBoolean(2);
 					boolean check_similary = IntStream.of(index).anyMatch(x -> x == banner_id);
 					if(click_or_view == true && check_similary == true) {
